@@ -9,13 +9,12 @@ const config: Config.InitialOptions = {
   verbose: true,
   transform: {
     [extensions.ts]: 'ts-jest',
-    [extensions.svelte]: ['svelte-jester', { preprocess: true }]
+    [extensions.svelte]: ['svelte-jester', { preprocess: true }],
   },
   extensionsToTreatAsEsm: ['.ts'],
   moduleFileExtensions: ['js', 'ts', 'svelte'],
   setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
-  testEnvironment: 'jsdom'
+  testEnvironment: 'jsdom',
 };
 
 export default config;
-
