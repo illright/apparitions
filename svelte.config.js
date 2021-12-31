@@ -8,10 +8,10 @@ const config = {
     vite: {
       resolve: {
         alias: {
-          '$userland': './src/userland'
-        }
-      }
-    }
+          $userland: './src/userland',
+        },
+      },
+    },
   },
 };
 
