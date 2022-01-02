@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import preprocess from 'svelte-preprocess';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -8,7 +9,7 @@ const config = {
     vite: {
       resolve: {
         alias: {
-          $userland: './src/userland',
+          $userland: resolve('./src/userland'),
         },
       },
     },
