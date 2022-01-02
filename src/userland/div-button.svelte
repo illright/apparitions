@@ -1,12 +1,17 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte';
+
   export let disabled = false;
+
+  const dispatch = createEventDispatcher();
 </script>
 
 <button
   class="custom-button"
   role="button"
-  on:click
+  on:click={() => dispatch('press')}
   aria-disabled={disabled}
+  {disabled}
   {...$$restProps}
 >
   <slot />

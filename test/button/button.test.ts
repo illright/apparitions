@@ -17,7 +17,7 @@ describe('a `<div>`-rooted button from a website user perspective', () => {
   it('is pressable with a mouse or touch', () => {
     const { component, getByRole } = render(DivButton);
     const mockPressHandler = jest.fn();
-    component.$on('click', mockPressHandler);
+    component.$on('press', mockPressHandler);
 
     userEvent.click(getByRole('button'));
     expect(mockPressHandler).toBeCalledTimes(1);
@@ -26,7 +26,7 @@ describe('a `<div>`-rooted button from a website user perspective', () => {
   it('is pressable with <Space> and <Enter>', () => {
     const { component, getByRole } = render(DivButton);
     const mockPressHandler = jest.fn();
-    component.$on('click', mockPressHandler);
+    component.$on('press', mockPressHandler);
 
     expect(document.body).toHaveFocus();
     userEvent.keyboard('{Enter}'); // shouldn't count
@@ -69,7 +69,7 @@ describe('a `<div>`-rooted button from a website user perspective', () => {
   });
 
   it('is not functional when disabled', () => {
-    const { component, getByRole } = render(DivButton);
+    const { component, getByRole } = render(DivButton, { disabled: true });
     const mockPressHandler = jest.fn();
     component.$on('press', mockPressHandler);
 
