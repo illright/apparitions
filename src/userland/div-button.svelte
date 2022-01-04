@@ -1,21 +1,18 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte';
+  import { createButton } from '$lib/button';
 
   export let disabled = false;
 
-  const dispatch = createEventDispatcher();
+  const { asButton, attributes } = createButton();
 </script>
 
-<button
+<div
+  use:asButton={{ disabled }}
+  {...attributes({ disabled }, $$restProps, 'div')}
   class="custom-button"
-  role="button"
-  on:click={() => dispatch('press')}
-  aria-disabled={disabled}
-  {disabled}
-  {...$$restProps}
 >
   <slot />
-</button>
+</div>
 
 <style>
   .custom-button {
@@ -31,7 +28,7 @@
   .custom-button[aria-disabled='true'] {
     border-color: #eee;
     background-color: transparent;
-    cursor: disabled;
+    cursor: not-allowed;
   }
 
   .custom-button.pressed {

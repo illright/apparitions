@@ -23,24 +23,65 @@ import { trackPressInSvelte } from '../interactions/track-press-svelte';
     I want to have a simpler button for cases when I don't need rich content.
 */
 
+type AttributeGenerator<Parameters> = (
+  _parameters?: Parameters,
+  _restProps?: Record<string, any>,
+  _tagName?: string
+) => Record<string, any>;
+
 export interface ButtonApparition {
   asButton: SvelteAction<ButtonParameters>;
   pressed: Writable<boolean>;
+  attributes: AttributeGenerator<ButtonParameters>;
 }
 
 export function createButton(): ButtonApparition {
   const { pressed, tracker } = trackPressInSvelte();
 
   return {
-    asButton: (node, parameters) => {
-      tracker.setParameters(parameters);
+    asButton: (node, parameters = { disabled: false }) => {
+      tracker.setParameters({ isDisabled: parameters.disabled });
       tracker.attach(node);
 
       return {
-        update: tracker.setParameters,
-        destroy: tracker.destroy,
+        update: (newParameters) => {
+          tracker.setParameters({ isDisabled: newParameters.disabled });
+        },
+        destroy: tracker.destroy.bind(tracker),
       };
     },
     pressed,
+    attributes: (parameters = { disabled: false, type: 'button' }, restProps = {}, tagName = 'button') => {
+      const elementType = tagName.toLowerCase();
+      if (elementType === 'button') {
+        return {
+          type: parameters.type,
+          disabled: parameters.disabled,
+          'aria-disabled':
+            !parameters.disabled
+              ? undefined
+              : String(parameters.disabled),
+          ...restProps,
+        };
+      } else {
+        return {
+          role: 'button',
+          tabIndex: parameters.disabled ? undefined : 0,
+          href:
+            elementType === 'a' && parameters.disabled
+              ? undefined
+              : parameters.href,
+          target: elementType === 'a' ? parameters.target : undefined,
+          type: elementType === 'input' ? parameters.type : undefined,
+          disabled: elementType === 'input' ? parameters.disabled : undefined,
+          'aria-disabled':
+            !parameters.disabled || elementType === 'input'
+              ? undefined
+              : String(parameters.disabled),
+          rel: elementType === 'a' ? parameters.rel : undefined,
+          ...restProps
+        };
+      }
+    }
   };
 }

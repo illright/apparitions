@@ -12,5 +12,5 @@ export function trackPressInSvelte(): Record<string, any> {
     onPressChange: pressed.set,
   });
 
-  return { pressed, attach: pressTracker.attach };
+  return { pressed, tracker: pressTracker };
 }

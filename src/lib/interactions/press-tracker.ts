@@ -114,6 +114,10 @@ export class PressTracker {
     this.localListeners = null;
   }
 
+  setParameters(newParameters: PressTrackerParameters): void {
+    this.parameters = newParameters;
+  }
+
   attach(node: HTMLElement): void {
     if (this.trackedNode !== null || this.localListeners !== null) {
       return;
@@ -126,7 +130,7 @@ export class PressTracker {
     this.localListeners.set('keydown', this.onKeyDown.bind(this));
     this.localListeners.set('keyup', this.onKeyUp.bind(this));
     this.localListeners.set('click', this.onClick.bind(this));
-    if (typeof PointerEvent !== undefined) {
+    if (typeof PointerEvent !== 'undefined') {
       this.localListeners.set('pointerdown', this.onPointerDown.bind(this));
       this.localListeners.set('mousedown', this.onMouseDownPE.bind(this));
       this.localListeners.set('pointerup', this.onPointerUp.bind(this));
@@ -279,7 +283,7 @@ export class PressTracker {
 
         // Focus may move before the key up event, so register the event on the document
         // instead of the same element where the key down event occurred.
-        this.globalListeners.add(document, 'keyup', this.globalOnKeyUp, { capture: false });
+        this.globalListeners.add(document, 'keyup', this.globalOnKeyUp.bind(this), { capture: false });
       }
     }
   }
@@ -404,16 +408,16 @@ export class PressTracker {
       this.globalListeners?.add(
         document,
         'pointermove',
-        this.globalOnPointerMove,
+        this.globalOnPointerMove.bind(this),
         { capture: false }
       );
-      this.globalListeners?.add(document, 'pointerup', this.globalOnPointerUp, {
+      this.globalListeners?.add(document, 'pointerup', this.globalOnPointerUp.bind(this), {
         capture: false,
       });
       this.globalListeners?.add(
         document,
         'pointercancel',
-        this.globalOnPointerCancel,
+        this.globalOnPointerCancel.bind(this),
         { capture: false }
       );
     }
