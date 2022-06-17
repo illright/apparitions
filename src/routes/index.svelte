@@ -1,5 +1,2 @@
-<script lang="ts">
-  import Button from './_ui/button.svelte';
-</script>
-
-<Button disabled on:press={() => console.log('pressed')}>text</Button>
+<h1>Welcome to SvelteKit</h1>
+<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
