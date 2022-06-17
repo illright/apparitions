@@ -5,7 +5,10 @@ import { preprocessor } from 'apparitions/preprocessor';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	preprocess: [preprocess(), preprocessor],
+	preprocess: [
+		preprocess(),
+		preprocessor,
+	],
 
 	kit: {
 		adapter: adapter()
