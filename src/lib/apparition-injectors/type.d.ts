@@ -17,12 +17,17 @@ export type ApparitionInjector = (
 	usedReturnedFields: string[]
 ) => {
 	/**
-	 * Valid code to replace the part of the `<script>` tag
-	 * that was previously occupied by the call to the apparition creator.
+	 * Valid code to replace the call to the apparition creator.
 	 *
-	 * May create variables to use in the event handlers.
+	 * Should be a JS expression returning an object.
 	 */
-	replacementCode?: string;
+	replacementExpression?: string;
+	/**
+	 * Valid code to insert before the original contents of the `<script>` tag.
+	 *
+	 * Suitable for inserting imports, etc.
+	 */
+	prependedCode?: string;
 	/**
 	 * The static attributes to assign to the target element
 	 * in place of the pseudo-action application.

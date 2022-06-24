@@ -9,11 +9,6 @@ import type { ApparitionInjector } from './apparition-injectors/index.js';
 
 const packageName = 'apparitions';
 
-interface Apparition {
-	attributes: Record<string, string>;
-	eventHandlers: Record<string, string>;
-}
-
 function stringifyAttributes(attributes: Record<string, string>) {
 	return Object.entries(attributes)
 		.map(([name, value]) => `${name}=${JSON.stringify(value)}`)
@@ -137,20 +132,29 @@ function injectApparitions(ast: Ast, s: MagicString) {
 
 				creator.parameters[0] = parent.name.toUpperCase();
 				if (creator.parameters[2] !== undefined) {
-					const { attributes, eventHandlers, replacementCode } = creator.injector(
-						...(creator.parameters as Parameters<ApparitionInjector>)
-					);
+					const { attributes, eventHandlers, replacementExpression, prependedCode } =
+						creator.injector(...(creator.parameters as Parameters<ApparitionInjector>));
 
-					if (replacementCode !== undefined) {
+					if (replacementExpression !== undefined) {
 						s.overwrite(
 							creator.creationLocation.start,
 							creator.creationLocation.end,
-							replacementCode
+							replacementExpression
 						);
 					}
 
-					const attributesSerialized = attributes !== undefined ? stringifyAttributes(attributes) : undefined;
-					const eventHandlersSerialized = eventHandlers !== undefined ? stringifyEventHandlers(eventHandlers) : undefined;
+					if (
+						prependedCode !== undefined &&
+						ast.instance !== undefined &&
+						ast.instance.content?.type === 'Program'
+					) {
+						s.appendLeft(ast.instance.content.start, prependedCode);
+					}
+
+					const attributesSerialized =
+						attributes !== undefined ? stringifyAttributes(attributes) : undefined;
+					const eventHandlersSerialized =
+						eventHandlers !== undefined ? stringifyEventHandlers(eventHandlers) : undefined;
 					s.overwrite(
 						node.start,
 						node.end,
@@ -180,6 +184,9 @@ export const preprocessor: PreprocessorGroup = {
 		// 	console.log(s.toString());
 		// }
 
-		return { code: s.toString(), map: s.generateMap().toString() };
+		return {
+			code: s.toString(),
+			map: s.generateMap().toString()
+		};
 	}
 };
