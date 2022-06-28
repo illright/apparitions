@@ -21,3 +21,5 @@ export const createButton: ApparitionInjector = (node, initObject) => {
 
   return injection;
 };
+
+createButton.actionNames = ['asButton'];

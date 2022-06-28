@@ -4,12 +4,12 @@
  * It is responsible for converting the invalid references to pseudo-code
  * into actual valid Svelte code with all the requested functionality.
  */
-export type ApparitionInjector = (
-  /** The node name of the target element, capitalized. */
-  node: string,
-  /** The expression that is passed to the apparition creator. */
-  initObject: string | undefined,
-  /**
+export type ApparitionInjector = ((
+	/** The node name of the target element, capitalized. */
+	node: string,
+	/** The expression that is passed to the apparition creator. */
+	initObject: string | undefined,
+	/**
 	 * The fields on the result of the apparition creator that are used in code.
 	 *
 	 * Allows detecting used features and shaking out the rest.
@@ -41,4 +41,4 @@ export type ApparitionInjector = (
 	 * created in the `replacementCode`.
 	 */
 	eventHandlers?: Record<string, string>;
-};
+}) & { actionNames: string[] };
