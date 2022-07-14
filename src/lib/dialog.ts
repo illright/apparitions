@@ -1,5 +1,6 @@
 interface DialogProps {
   open: boolean;
+  alert?: boolean;
 }
 
 interface CreateDialogReturn {

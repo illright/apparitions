@@ -6,7 +6,7 @@
 
   const { asOverlay, modalProps } = createModal();
   const { asDialog, sync, label, description } = createDialog();
-  $: dialogProps = sync({ open });
+  $: dialogProps = sync({ open, alert: true });
 </script>
 
 <div class="overlay" use:asOverlay>
