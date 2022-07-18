@@ -1,5 +1,12 @@
 <script lang="ts">
-  import Button from '../../src/routes/_ui/button.svelte';
+  import Breadcrumbs from "./_ui/breadcrumbs.svelte";
+  import Breadcrumb from "./_ui/breadcrumb.svelte";
 </script>
 
-<Button disabled on:press={() => console.log('pressed')}>text</Button>
+<Breadcrumbs aria-label="Breadcrumbs">
+  <Breadcrumb href="/">Home</Breadcrumb>
+  <Breadcrumb href="/admin">Admin</Breadcrumb>
+  <Breadcrumb current>Profile</Breadcrumb>
+</Breadcrumbs>
+
+
