@@ -3,13 +3,13 @@
 
   export let disabled = false;
 
-  const { asButton, sync } = createButton();
+  const { asButton, sync, pressed } = createButton();
   $: attributes = sync({ disabled });
 </script>
 
 <div
-  class="my-button"
   class:disabled
+  class:pressed={$pressed}
   use:asButton
   {...attributes}
 >
@@ -17,7 +17,7 @@
 </div>
 
 <style>
-  .my-button {
+  div {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,7 +28,7 @@
     background-color: #eee;
   }
 
-  .my-button.disabled {
+  div.disabled {
     border-color: #eee;
     background-color: transparent;
     cursor: not-allowed;

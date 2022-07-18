@@ -1,67 +1,74 @@
 import { createEventDispatcher } from 'svelte';
-
-export interface ButtonApparitionCreatorProps {
-	disabled?: boolean;
-}
+import type { Writable } from 'svelte/store';
 
 class ButtonApparition {
-	private node: HTMLElement | undefined;
-	private callbackPress: () => void;
-	private props: ButtonApparitionCreatorProps | undefined;
+  private node: HTMLElement | undefined;
+  private callbackPress: () => void;
+  private props: ButtonProps | undefined;
 
-	constructor({ onPress }: { onPress: () => void }) {
-		this.callbackPress = onPress;
+  constructor({ onPress }: { onPress: () => void }) {
+    this.callbackPress = onPress;
 
-		this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
 
-		this.sync = this.sync.bind(this);
-	}
+    this.sync = this.sync.bind(this);
+  }
 
-	attach(node: HTMLElement) {
-		this.node = node;
-		node.addEventListener('mousedown', this.onMouseDown);
-	}
+  attach(node: HTMLElement) {
+    this.node = node;
+    node.addEventListener('mousedown', this.onMouseDown);
+  }
 
-	detach() {
-		if (this.node === undefined) {
-			return;
-		}
+  detach() {
+    if (this.node === undefined) {
+      return;
+    }
 
-		this.node.removeEventListener('mousedown', this.onMouseDown);
-		this.node = undefined;
-	}
+    this.node.removeEventListener('mousedown', this.onMouseDown);
+    this.node = undefined;
+  }
 
-	onMouseDown() {
-		if (!(this.props?.disabled ?? false)) {
-			this.callbackPress();
-		}
-	}
+  onMouseDown() {
+    if (!(this.props?.disabled ?? false)) {
+      this.callbackPress();
+    }
+  }
 
-	sync({ disabled = false }: ButtonApparitionCreatorProps) {
-		this.props = { disabled };
+  sync({ disabled = false }: ButtonProps) {
+    this.props = { disabled };
 
-		return {
-			'aria-disabled': disabled ? 'true' as const : undefined,
-		}
-	}
+    return {
+      'aria-disabled': disabled ? ('true' as const) : undefined,
+    };
+  }
 }
 
 export interface ButtonEvents {
 	press: void;
 }
 
-export function createButton() {
-	const dispatch = createEventDispatcher<ButtonEvents>();
-	const button = new ButtonApparition({
-		onPress: () => dispatch('press')
-	});
+interface ButtonProps {
+	disabled?: boolean;
+}
 
-	function asButton(node: HTMLElement) {
-		button.attach(node);
-		return {
-			destroy: () => button.detach(),
-		}
-	}
+interface CreateButtonReturn {
+	asButton: (node: HTMLElement) => void;
+	sync: (props: ButtonProps) => Record<string, string | undefined>;
+	pressed: Writable<boolean>;
+}
 
-	return { asButton, sync: button.sync };
+export function createButton(): CreateButtonReturn {
+  const dispatch = createEventDispatcher<ButtonEvents>();
+  const button = new ButtonApparition({
+    onPress: () => dispatch('press'),
+  });
+
+  function asButton(node: HTMLElement) {
+    button.attach(node);
+    return {
+      destroy: () => button.detach(),
+    };
+  }
+
+  return { asButton, sync: button.sync } as any;
 }
