@@ -3,20 +3,34 @@
   import { createModal } from '$lib/modal';
 
   export let open = false;
+  export let returnFocusTo: HTMLElement | undefined = undefined;
 
-  const { asOverlay, modalProps } = createModal();
-  const { asDialog, sync, label, description } = createDialog();
-  $: dialogProps = sync({ open, alert: true });
+  let leastDestructiveFocusable: HTMLElement | undefined;
+
+  const { asOverlay, sync: syncModal } = createModal();
+  const { asDialog, sync: syncDialog, label, description } = createDialog();
+  $: modalProps = syncModal({
+    open,
+    returnFocusTo,
+    focusOnOpen: leastDestructiveFocusable,
+  });
+  $: dialogProps = syncDialog({ alert: true });
 </script>
 
-<div class="overlay" use:asOverlay>
-  <div use:asDialog {...modalProps} {...dialogProps}>
-    <h1 {...label()}>Warning</h1>
-    <p {...description(0)}>This is a warning dialog.</p>
-    <p {...description(1)}>Please be sure you understand.</p>
-    <button on:click={() => (open = false)}>Close</button>
+{#if open}
+  <div class="overlay" use:asOverlay>
+    <div class="dialog" use:asDialog {...modalProps} {...dialogProps}>
+      <h1 {...label()}>Warning</h1>
+      <p {...description(0)}>This is a warning dialog.</p>
+      <p {...description(1)}>Please be sure you understand.</p>
+      <button
+        bind:this={leastDestructiveFocusable}
+        on:click={() => (open = false)}>Close</button
+      >
+      <button on:click={() => alert('You silly')}>Destroy everything</button>
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .overlay {
@@ -27,5 +41,9 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 100;
+  }
+
+  .dialog {
+    background: white;
   }
 </style>

@@ -1,5 +1,4 @@
 interface DialogProps {
-  open: boolean;
   alert?: boolean;
 }
 
