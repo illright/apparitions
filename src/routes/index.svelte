@@ -1,12 +1,15 @@
 <script lang="ts">
-  import Breadcrumbs from "./_ui/breadcrumbs.svelte";
-  import Breadcrumb from "./_ui/breadcrumb.svelte";
+  import Listbox from './_ui/listbox.svelte';
+  import OptionGroup from './_ui/option-group.svelte';
+  import Option from './_ui/option.svelte';
+
+  let value: string | undefined = undefined;
 </script>
 
-<Breadcrumbs aria-label="Breadcrumbs">
-  <Breadcrumb href="/">Home</Breadcrumb>
-  <Breadcrumb href="/admin">Admin</Breadcrumb>
-  <Breadcrumb current>Profile</Breadcrumb>
-</Breadcrumbs>
-
-
+<Listbox bind:value>
+  <OptionGroup title="Fruit">
+    <Option value="apple">Apple</Option>
+    <Option value="banana">Banana</Option>
+    <Option value="orange">Orange</Option>
+  </OptionGroup>
+</Listbox>
