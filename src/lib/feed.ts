@@ -1,5 +1,6 @@
 interface FeedProps {
   length: number | undefined;
+  // TODO: implement virtualization
 }
 
 interface CreateFeedReturn {
