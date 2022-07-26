@@ -29,7 +29,11 @@
 		"svelte-preprocess": "^4.10.6",
 		"tslib": "^2.3.1",
 		"typescript": "^4.7.2",
+		"utility-types": "^3.10.0",
 		"vite": "^3.0.2"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"hexoid": "^1.0.0"
+	}
 }

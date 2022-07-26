@@ -1,12 +1,10 @@
 <script lang="ts">
   import { createAccordion } from '$lib/accordion';
 
-  export let singleExpansion = false;
-
-  const { sync } = createAccordion();
-  $: accordionProps = sync({ singleExpansion });
+  const { asAccordion, react } = createAccordion();
+  $: react({ allowMultipleExpandedPanels: true, forbidNoExpandedPanels: true });
 </script>
 
-<div {...accordionProps}>
+<div use:asAccordion>
   <slot />
 </div>

@@ -3,8 +3,9 @@
 
   export let open = false;
 
-  const { asHeader, sync } = createAccordionSection();
-  $: [headerProps, panelProps] = sync({ open });
+  const { asHeader, react, openStore } = createAccordionSection();
+  $: [headerProps, panelProps] = react({ open });
+  $: open = $openStore;
 </script>
 
 <h2>
@@ -12,6 +13,8 @@
     <slot name="header" />
   </div>
 </h2>
-<div {...panelProps}>
-  <slot name="panel" />
-</div>
+{#if open}
+  <div {...panelProps}>
+    <slot name="panel" />
+  </div>
+{/if}
